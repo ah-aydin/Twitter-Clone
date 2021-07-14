@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { login } from '../actions/auth'
+import { getFollowingTweets, MEH } from '../actions/tweet';
 
 import ErrorMessages from '../components/ErrorMessages';
 
-const Login = ({ login, login_success, isAuthenticated }) => {
+const Login = ({ login, isAuthenticated }) => {
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -20,15 +21,10 @@ const Login = ({ login, login_success, isAuthenticated }) => {
     }
     
     if (isAuthenticated) {
+        MEH();
+        console.log("1")
+        console.log("2")
         return <Redirect to="/"/>
-    }
-
-    const login_failed = () => {
-        if (!login_success) {
-            return <li className="list-group-item list-group-item-danger">Wrong email or password</li>
-        } else {
-            return;
-        }
     }
     
     return (
@@ -70,8 +66,7 @@ const Login = ({ login, login_success, isAuthenticated }) => {
 };
 
 const mapStateToProps = (state) => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    login_success: state.auth.login_success
+    isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps, { login })(Login);

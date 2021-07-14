@@ -8,7 +8,7 @@ import {
     LOGOUT,
     USER_LOAD_SUCCESS,
     USER_LOAD_FAIL
-} from '../actions/types.js'
+} from '../actions/types.js';
 
 const initialState = {
     access: localStorage.getItem("access"),
@@ -21,11 +21,11 @@ const initialState = {
 };
 
 const formatErrors = (errors) => {
-    let formatData = [ ]
+    let formatData = [ ];
     for (const error in errors) {
         formatData.push(errors[error])
     }
-    return formatData
+    return formatData;
 }
 
 const removeItems = () => {
@@ -35,7 +35,7 @@ const removeItems = () => {
 }
 
 export default function(state = initialState, action) {
-    const { type, payload } = action
+    const { type, payload } = action;
     switch(type) {
         case LOGIN_SUCCESS:
             localStorage.setItem("access", payload.access);

@@ -20,7 +20,7 @@ class AccountSerializer(serializers.HyperlinkedModelSerializer):
             'date_joined', 'last_login', 
             'likes_url', 'tweets_url', 
             'follower_count', 'followers_url', 
-            'following_count', 'following_url'
+            'following_count', 'following_url',
         ]
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):

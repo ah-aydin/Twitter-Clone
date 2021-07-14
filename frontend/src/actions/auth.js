@@ -13,6 +13,8 @@ import {
     ACTIVATION_FAIL
 } from './types';
 
+import { get_following_tweets } from './tweet'
+
 const WEBSITE_API_URL = "http://localhost:8000/";
 
 export const load_user = () => async dispatch => {
@@ -23,20 +25,19 @@ export const load_user = () => async dispatch => {
             }
         };
 
-        axios.get(`${WEBSITE_API_URL}auth/users/me/`, config)
-        .then(response => {
+        try{
+            const response = await axios.get(`${WEBSITE_API_URL}auth/users/me/`, config);
             dispatch({
                 type: USER_LOAD_SUCCESS,
                 payload: response.data
             });
-        })
-        .catch(err => {
+            dispatch(get_following_tweets());
+        } catch (err) {
             dispatch({
                 type: USER_LOAD_FAIL,
                 payload: err.response.data
             });
-        });
-
+        }
     } else {
         dispatch({
             type: USER_LOAD_FAIL
@@ -52,21 +53,20 @@ export const login = (email, password) => async dispatch => {
     };
     const body = JSON.stringify({email, password});
 
-    axios.post(`${WEBSITE_API_URL}auth/jwt/create`, body, config)
-    .then(response => {
+    try {
+        const response = await axios.post(`${WEBSITE_API_URL}auth/jwt/create`, body, config);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: response.data
         });
 
-        dispatch(load_user())
-    })
-    .catch(err => {
+        dispatch(load_user());
+    } catch (err) {
         dispatch({
             type: LOGIN_FAIL,
             payload: err.response.data
         });
-    });
+    }
 }
 
 export const signup = (email, username, name, last_name, password, re_password) => async dispatch => {
@@ -77,19 +77,18 @@ export const signup = (email, username, name, last_name, password, re_password) 
     };
     const body = JSON.stringify({ email, username, name, last_name, password, re_password });
 
-    axios.post(`${WEBSITE_API_URL}auth/users/`, body, config)
-    .then(response => {
+    try {
+        const response = await axios.post(`${WEBSITE_API_URL}auth/users/`, body, config);
         dispatch({
             type: SIGNUP_SUCCESS,
             payload: email
         });
-    })
-    .catch(err => {
+    } catch (err) {
         dispatch({
             type: SIGNUP_FAIL,
             payload: err.response.data
         });
-    });
+    }
 }
 
 export const logout = () => async dispatch => {
@@ -106,16 +105,15 @@ export const verify = (uid, token) => async dispatch => {
     }
     const body = JSON.stringify({uid, token})
 
-    axios.post(`${WEBSITE_API_URL}auth/users/activation/`, body, config)
-    .then(response => {
+    try {
+        const response = axios.post(`${WEBSITE_API_URL}auth/users/activation/`, body, config);
         dispatch({
             type: ACTIVATION_SUCCESS
         });
-    })
-    .catch(err => {
+    } catch (err) {
         dispatch({
             type: ACTIVATION_FAIL,
             payload: err.response.data
         });
-    });
+    }
 }

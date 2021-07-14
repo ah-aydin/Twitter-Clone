@@ -1,7 +1,9 @@
 from .models import Account, Follow
 from .serializers import AccountSerializer, FollowSerializer, FollowingSerializer, FollowerSerializer, LikeSerializer
 from tweet.serializers import TweetSerializer
+from tweet.models import Tweet
 
+from django.db.models import Q, QuerySet
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
@@ -31,6 +33,21 @@ class AccountTweetList(generics.ListAPIView):
 
 # Follow
 
+class FollowingTweetList(generics.ListAPIView):
+    serializer_class = TweetSerializer
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Get follows of the account
+        follows = self.request.user.following.all()
+        # Get the accounts that are followed
+        accounts = []
+        for follow in follows:
+            accounts.append(follow.follow)
+        
+        tweets = Tweet.objects.filter(owner__in=accounts)
+        return tweets
+
 class FollowingList(generics.ListAPIView):
     serializer_class = FollowingSerializer
 
@@ -49,9 +66,14 @@ class FollowAddRemove(generics.GenericAPIView):
     serializer_class = FollowSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, id_follow, *args, **kwargs):
-        follower = request.user
+    def post(self, request, *args, **kwargs):
+        try:
+            request.data['id_account']
+        except Exception:
+            return Response("No id_account was provided", status=status.HTTP_400_BAD_REQUEST)
         
+        follower = request.user
+        id_follow = request.data['id_account']
         # See if the follow users id is valid
         following = None
         try:

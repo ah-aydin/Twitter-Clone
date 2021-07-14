@@ -1,11 +1,21 @@
 import React from 'react'
+import axios from 'axios'
+import { connect } from 'react-redux';
 
-const Home = () => {
+import Tweet from '../components/Tweet';    
+
+const Home = ({ tweets }) => {
     return (
-        <div>
-            Home
+        <div style={{marginTop:70}}>
+            {tweets.results.map((tweet) => (
+                <Tweet content={tweet.content} owner_username={tweet.owner_username } owner_url={tweet.owner_url}/>
+            ))}
         </div>
     )
 };
 
-export default Home;
+const mapStateToProps = (state) => ({
+    tweets: state.tweet.tweets
+});
+
+export default connect(mapStateToProps, { })(Home);
