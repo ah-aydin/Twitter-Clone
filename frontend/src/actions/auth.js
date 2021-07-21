@@ -10,12 +10,12 @@ import {
     USER_LOAD_FAIL,
     USER_LOAD_SUCCESS,
     ACTIVATION_SUCCESS,
-    ACTIVATION_FAIL
+    ACTIVATION_FAIL,
+    TWEET_CLEAR,
+    FOLLOW_ACCOUNT
 } from './types';
 
-import { get_following_tweets } from './tweet'
-
-const WEBSITE_API_URL = "http://localhost:8000/";
+import { getFollowingTweets } from './tweet'
 
 export const load_user = () => async dispatch => {
     if (localStorage.getItem("access")) {
@@ -26,12 +26,12 @@ export const load_user = () => async dispatch => {
         };
 
         try{
-            const response = await axios.get(`${WEBSITE_API_URL}auth/users/me/`, config);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}auth/users/me/`, config);
             dispatch({
                 type: USER_LOAD_SUCCESS,
                 payload: response.data
             });
-            dispatch(get_following_tweets());
+            dispatch(getFollowingTweets());
         } catch (err) {
             dispatch({
                 type: USER_LOAD_FAIL,
@@ -54,7 +54,7 @@ export const login = (email, password) => async dispatch => {
     const body = JSON.stringify({email, password});
 
     try {
-        const response = await axios.post(`${WEBSITE_API_URL}auth/jwt/create`, body, config);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}auth/jwt/create`, body, config);
         dispatch({
             type: LOGIN_SUCCESS,
             payload: response.data
@@ -78,7 +78,7 @@ export const signup = (email, username, name, last_name, password, re_password) 
     const body = JSON.stringify({ email, username, name, last_name, password, re_password });
 
     try {
-        const response = await axios.post(`${WEBSITE_API_URL}auth/users/`, body, config);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}auth/users/`, body, config);
         dispatch({
             type: SIGNUP_SUCCESS,
             payload: email
@@ -94,7 +94,10 @@ export const signup = (email, username, name, last_name, password, re_password) 
 export const logout = () => async dispatch => {
     dispatch({
         type: LOGOUT
-    })
+    });
+    dispatch({
+        type: TWEET_CLEAR
+    });
 }
 
 export const verify = (uid, token) => async dispatch => {
@@ -106,7 +109,7 @@ export const verify = (uid, token) => async dispatch => {
     const body = JSON.stringify({uid, token})
 
     try {
-        const response = axios.post(`${WEBSITE_API_URL}auth/users/activation/`, body, config);
+        const response = axios.post(`${process.env.REACT_APP_API_URL}auth/users/activation/`, body, config);
         dispatch({
             type: ACTIVATION_SUCCESS
         });
@@ -114,6 +117,27 @@ export const verify = (uid, token) => async dispatch => {
         dispatch({
             type: ACTIVATION_FAIL,
             payload: err.response.data
+        });
+    }
+}
+
+export const follow = (id) => async dispatch => {
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('access')}`,
+            'Content-type': 'application/json'
+        }
+    };
+    const body = { 'id_account': id }
+
+    try {
+        const response = axios.post(`${process.env.REACT_APP_API_URL}api/account/follow/`, body, config);
+        dispatch({
+            type: FOLLOW_ACCOUNT
+        });
+    } catch (err) {
+        dispatch({
+            type: FOLLOW_ACCOUNT
         });
     }
 }

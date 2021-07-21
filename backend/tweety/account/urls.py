@@ -14,6 +14,7 @@ urlpatterns = [
 
     # Follow
     path('follow/', views.FollowAddRemove.as_view(), name='account-follow-add-remove'),
+    path('follow/<int:pk>/', views.IsFollowing.as_view(), name='account-is-following'),
 
     # Account following
     path('following/tweets/', views.FollowingTweetList.as_view(), name='account-following-tweet-list'),

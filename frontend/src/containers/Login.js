@@ -21,9 +21,6 @@ const Login = ({ login, isAuthenticated }) => {
     }
     
     if (isAuthenticated) {
-        MEH();
-        console.log("1")
-        console.log("2")
         return <Redirect to="/"/>
     }
     

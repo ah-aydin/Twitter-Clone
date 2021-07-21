@@ -9,5 +9,8 @@ urlpatterns = [
 
     # Tweet likes
     path('<int:pk>/likes/', views.LikeList.as_view(), name='like-list'),
-    path('<int:pk>/likes/add/', views.LikeAddRemove.as_view(), name='like-add-remove')
+    path('<int:pk>/likes/add/', views.LikeAddRemove.as_view(), name='like-add-remove'),
+
+    # Likes
+    path('likes/<int:tweet_id>/', views.UserHadLikedTweet.as_view(), name='user-has-liked-tweet'),
 ]

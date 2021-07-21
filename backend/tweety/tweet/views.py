@@ -88,4 +88,13 @@ class LikeAddRemove(generics.GenericAPIView):
             # Create like
             like = Like.objects.create(owner=request.user, tweet=tweet)
             return Response("Liked", status=status.HTTP_200_OK)
-        
+
+class UserHadLikedTweet(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, tweet_id, *args, **kwargs):
+        try:
+            like = Like.objects.get(tweet__id=tweet_id, owner=request.user)
+            return Response(True)
+        except Exception:
+            return Response(False)

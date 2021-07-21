@@ -1,22 +1,20 @@
 import axios from 'axios'
 import {
     TWEET_GET_FOLLOWING_SUCCESS,
-    TWEET_GET_FOLLOWING_FAIL
+    TWEET_GET_FOLLOWING_FAIL,
+    LOAD_USER_TWEET_SUCCESS,
+    LOAD_USER_TWEET_FAIL
 } from './types'
 
-const WEBSITE_API_URL = "http://localhost:8000/";
-
-export const get_following_tweets = () => async dispatch => {
-    console.log("I AM IN");
+export const getFollowingTweets = () => async dispatch => {
     const config = { 
         headers: {
             'Authorization': `JWT ${localStorage.getItem('access')}`,
         }
     };
-    console.log("I AM STILL IN");
 
     try {
-        const response = await axios.get(`${WEBSITE_API_URL}api/account/following/tweets/`, config);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}api/account/following/tweets/`, config);
         dispatch({
             type: TWEET_GET_FOLLOWING_SUCCESS,
             payload: response.data
@@ -28,6 +26,46 @@ export const get_following_tweets = () => async dispatch => {
     }
 }
 
-export const MEH = () => async dispatch => {
-    console.log("MEHHHHHHHHHHH");
+export const like_tweet = (tweet_id)  => {
+    const config = {
+        headers: {
+            'Authorization': `JWT ${localStorage.getItem('access')}`
+        }
+    };
+    axios.post(`${process.env.REACT_APP_API_URL}api/tweet/${tweet_id}/likes/add/`, { }, config);
+}
+
+export const post_tweet = (content, retweet_id=null) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}`
+        }
+    };
+    let body;
+    if (retweet_id) {
+        body = JSON.stringify({content, retweet_id});
+    } else {
+        body = JSON.stringify({content});
+    }
+
+    axios.post(`${process.env.REACT_APP_API_URL}api/tweet/`, body, config).catch(err => {
+        console.log(err.response)
+    });
+}
+
+export const loadUserTweets = (id) => async dispatch => {
+    axios.get(`${process.env.REACT_APP_API_URL}api/account/${id}/tweets/`, { })
+    .then(response => {
+        const data = response.data
+        dispatch({
+            type: LOAD_USER_TWEET_SUCCESS,
+            payload: data
+        });
+    })
+    .catch(err => {
+        dispatch({
+            type: LOAD_USER_TWEET_FAIL,
+        });
+    });
 }

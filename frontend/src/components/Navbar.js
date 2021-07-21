@@ -20,9 +20,17 @@ const Navbar = ({ isAuthenticated, logout }) => {
 
     const authLinks = () => {
         return (
-            <li className="nav-item">
-                <Link className="nav-link" to="/" onClick={logout}>Logout</Link>
-            </li>
+            <Fragment>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/account">Account</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/create_tweet">Tweet</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/" onClick={logout}>Logout</Link>
+                </li>
+            </Fragment>
         )
     };
     

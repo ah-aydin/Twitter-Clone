@@ -16,7 +16,7 @@ class AccountSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Account
         fields = [
-            'url', 'id', 'username', 'name', 'last_name', 
+            'url', 'id', 'username', 'name', 'last_name', 'email',
             'date_joined', 'last_login', 
             'likes_url', 'tweets_url', 
             'follower_count', 'followers_url', 

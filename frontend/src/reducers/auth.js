@@ -7,7 +7,8 @@ import {
     ACTIVATION_FAIL,
     LOGOUT,
     USER_LOAD_SUCCESS,
-    USER_LOAD_FAIL
+    USER_LOAD_FAIL,
+    FOLLOW_ACCOUNT
 } from '../actions/types.js';
 
 const initialState = {
@@ -103,6 +104,7 @@ export default function(state = initialState, action) {
                 errors: [ ],
                 successes: [`An activation email has been sent to ${payload}`]
             };
+        case FOLLOW_ACCOUNT:
         case ACTIVATION_SUCCESS:
             return {
                 ...state

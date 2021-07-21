@@ -45,7 +45,7 @@ class FollowingTweetList(generics.ListAPIView):
         for follow in follows:
             accounts.append(follow.follow)
         
-        tweets = Tweet.objects.filter(owner__in=accounts)
+        tweets = Tweet.objects.filter(owner__in=accounts).order_by('-date_created')
         return tweets
 
 class FollowingList(generics.ListAPIView):
@@ -103,3 +103,16 @@ class FollowAddRemove(generics.GenericAPIView):
             # Create follow
             follow = Follow.objects.create(follower=follower, follow=following)
             return Response("Followed", status=status.HTTP_200_OK)
+
+class IsFollowing(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk, *args, **kwargs):
+        follower = request.user
+        id_follow = pk
+        following = Account.objects.get(pk=id_follow)
+        try:
+            Follow.objects.get(follower=follower, follow=following)
+            return Response(True, status=status.HTTP_200_OK)
+        except Exception:
+            return Response(False, status=status.HTTP_200_OK)
