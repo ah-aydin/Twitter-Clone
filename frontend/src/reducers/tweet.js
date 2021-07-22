@@ -3,7 +3,9 @@ import {
     TWEET_GET_FOLLOWING_FAIL,
     LOAD_USER_TWEET_SUCCESS,
     LOAD_USER_TWEET_FAIL,
-    TWEET_CLEAR
+    TWEET_CLEAR,
+    LOAD_USER_MORE_TWEET_SUCCESS,
+    LOAD_USER_MORE_TWEET_FAIL
 } from '../actions/types.js';
 
 const initialState = {
@@ -26,12 +28,29 @@ export default function(state = initialState, action) {
         case LOAD_USER_TWEET_SUCCESS:
             return {
                 ...state,
-                tweets: payload
+                tweets: {
+                    ...state.tweets,
+                    results: [...payload.results],
+                    next: payload.next,
+                }
+            }
+        case LOAD_USER_MORE_TWEET_SUCCESS:
+            return {
+                ...state,
+                tweets: {
+                    results: [...state.tweets.results, ...payload.results],
+                    next: payload.next,
+                    previous: payload.previous
+                }
             }
         case LOAD_USER_TWEET_FAIL:
             return {
                 ...state,
                 tweets: { results: [], next: null, previous: null }
+            }
+        case LOAD_USER_MORE_TWEET_FAIL:
+            return {
+                ...state
             }
         case TWEET_GET_FOLLOWING_SUCCESS:
             return {

@@ -3,7 +3,9 @@ import {
     TWEET_GET_FOLLOWING_SUCCESS,
     TWEET_GET_FOLLOWING_FAIL,
     LOAD_USER_TWEET_SUCCESS,
-    LOAD_USER_TWEET_FAIL
+    LOAD_USER_TWEET_FAIL,
+    LOAD_USER_MORE_TWEET_SUCCESS,
+    LOAD_USER_MORE_TWEET_FAIL
 } from './types'
 
 export const getFollowingTweets = () => async dispatch => {
@@ -57,7 +59,7 @@ export const post_tweet = (content, retweet_id=null) => {
 export const loadUserTweets = (id) => async dispatch => {
     axios.get(`${process.env.REACT_APP_API_URL}api/account/${id}/tweets/`, { })
     .then(response => {
-        const data = response.data
+        const data = response.data;
         dispatch({
             type: LOAD_USER_TWEET_SUCCESS,
             payload: data
@@ -68,4 +70,20 @@ export const loadUserTweets = (id) => async dispatch => {
             type: LOAD_USER_TWEET_FAIL,
         });
     });
+}
+
+export const loadMoreUserTweets = (next) => async dispatch => {
+    axios.get(next, { })
+    .then(response => {
+        const data = response.data;
+        dispatch({
+            type:LOAD_USER_MORE_TWEET_SUCCESS,
+            payload: data
+        });
+    })
+    .catch(err => {
+        dispatch({
+            type: LOAD_USER_MORE_TWEET_FAIL
+        })
+    })
 }

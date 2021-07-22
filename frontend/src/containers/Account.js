@@ -1,16 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { updateUserInfo } from "../actions/auth";
-import { getUserTweets } from "../actions/tweet";
 
-import { loadUserTweets } from "../actions/tweet";
+import { loadUserTweets, loadMoreUserTweets } from "../actions/tweet";
 import { follow } from "../actions/auth";
 
 import Tweet from "../components/Tweet";
 
-const Account = ({ loadUserTweets, follow, match, tweets, isAuthenticated }) => {
+const Account = ({ loadUserTweets, follow, loadMoreUserTweets, match, tweets, isAuthenticated }) => {
     const [accountDetails, setAccountDetails] = useState({
         name: '',
         last_name: '',
@@ -64,8 +61,10 @@ const Account = ({ loadUserTweets, follow, match, tweets, isAuthenticated }) => 
     const { name, last_name, email, username, id } = accountDetails;
 
     const buttonFollowClick = () => {
-        follow(id);
-        setFollowing(!following);
+        if (isAuthenticated) {
+            follow(id);
+            setFollowing(!following);
+        }
     }
 
     return (
@@ -79,6 +78,14 @@ const Account = ({ loadUserTweets, follow, match, tweets, isAuthenticated }) => 
             {tweets.results.map((tweet) => (
                 <Tweet id={`tweet_id_${tweet.id}`} tweet={tweet} owner_username={tweet.owner_username} owner_id={tweet.owner_id}/>
             ))}
+            {tweets.next ? 
+                <div className="form-group row justify-content-md-center mt-3 mb-1 px-1">
+                <button onClick={(e) => loadMoreUserTweets(tweets.next)} className="btn btn-primary col-sm-12">
+                    Load More
+                </button>
+            </div>
+            :
+            <div/>}
         </div>
     )
 };
@@ -88,4 +95,4 @@ const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { loadUserTweets, follow })(Account);
+export default connect(mapStateToProps, { loadUserTweets, follow, loadMoreUserTweets })(Account);
