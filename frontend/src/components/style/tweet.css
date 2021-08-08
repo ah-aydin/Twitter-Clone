@@ -1,0 +1,86 @@
+.tweet {
+    background: var(--color-2);
+    color: var(--color-5);
+    border-radius: 10px;
+}
+
+.tweet .properties {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+    height: 30px;
+    width: 100%;
+    padding: 2px 10px;
+    font-size: 20px;
+}
+
+.tweet .properties .owner-info {
+}
+
+.tweet .properties .owner-info .username {
+    
+}
+
+.tweet .properties .date-created {
+    
+}
+
+.tweet hr {
+    height: 1px;
+    margin: 6px 6px 10px 6px;
+}
+
+.tweet .content {
+    padding: 2px 10px;
+    font-weight: 500;
+}
+
+.tweet .actions {
+    display: flex;
+    flex-direction: row-reverse;
+
+    list-style: none;
+
+    padding: 0 10px 4px 10px;
+    width: 100%;
+
+    font-size: 23px;
+}
+
+.tweet .actions .button {
+    display: flex;
+    flex-direction: row;
+
+    height: 34px;
+    width: fit-content;
+    min-width: 34px;
+    margin-left: 4px;
+
+    text-align: center;
+
+    border-style: solid;
+    border-radius: 17px;
+    border-color: var(--color-1);
+    border-width: 2px;
+
+    cursor: pointer;
+
+    transition: all 0.4s ease;
+}
+
+.tweet .actions .button:hover {
+    background: var(--color-1);
+    color: var(--color-5);
+}
+
+.tweet .actions .button .value {
+    margin: auto 0 auto 6px;
+    height: 20px;
+    line-height: 20px;
+}
+
+.tweet .actions .button i {
+    width: 30px;
+    margin: auto 0;
+}

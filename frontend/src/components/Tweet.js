@@ -5,9 +5,12 @@ import axios from 'axios';
 
 import { like_tweet, post_tweet } from '../actions/tweet';
 
+import './style/tweet.css';
+
 const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
     const [liked, setLiked] = useState(false);
     const [retweeting, setRetweeting] = useState(false);
+    const [likeCount, setLikeCount] = useState(tweet.like_count);
     const [retweetContent, setRetweetContent] = useState("");
 
     const onChange = (e) => setRetweetContent(e.target.value);
@@ -22,6 +25,11 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
     const likeTweet = (e) => {
         e.preventDefault();
         setLiked(!liked);
+        if (liked) {
+            setLikeCount(likeCount - 1);
+        } else {
+            setLikeCount(likeCount + 1);
+        }
         like_tweet(tweet.id);
     };
 
@@ -52,8 +60,9 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
     const getRetweetArea = () => {
         if (retweeting) {
             return (
-                <div className="row mx-1 mb-2">
-                    <form className="col-lg-12" onSubmit={(e) => onSubmit(e)}>
+                <div className="row mx-1 mb-2" style={{marginBottom: 5}}>
+                    <hr style={{marginBottom: 3}} />
+                    <form className="col-lg-12" onSubmit={(e) => onSubmit(e)} style={{marginBottom: 4}}>
                         <div className="form-group mb-3">
                             <textarea
                                 className="form-control" 
@@ -83,33 +92,32 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
     }, []);
     
     return(
-        <div className="container py-0 px-1" id={id}>
-            <div className="row justify-content-md-center p-0">
-                <div className="card col col-lg-6 text-white bg-primary mb-3 p-0">
-
-                    <div className="card-header">
+        <div className="tweet" id={id}>
+            <div className="properties">
+                <div className="owner-info">
+                    <div className="username">
                         <Link to={`/account/${owner_id}`} className="text-white">{owner_username}</Link>
                     </div>
-                    <div className="card-body">
-                        <h5 className="card-title">{tweet.content}</h5>
-                    </div>
-                    
-                    <div className="row mx-1 mb-2">
-                        <div className="col-lg-5">
-                            <button 
-                                type="button" 
-                                className={`btn ${liked ? 'btn-success': 'btn-secondary'}`}
-                                id={`${id}_like_button`}
-                                style={{marginRight: 4}} 
-                                onClick={likeTweet}>
-                                    L
-                            </button>
-                            <button type="button" className="btn btn-danger" onClick={onRetweetClick}>R</button>
-                        </div>
-                    </div>
-                    {getRetweetArea()}
+                </div>
+                <div className="date-created">
+                    {tweet.date_created.substring(0, 10)}
                 </div>
             </div>
+            <hr />
+            <div className="content">
+                {tweet.content}
+            </div>
+            <hr style={{marginBottom: 3}} />
+            <ul className="actions">
+                <li className="button">
+                    <i className='bx bx-reply' onClick={onRetweetClick}></i>
+                </li>
+                <li className="button" onClick={likeTweet}>
+                    <div className="value">{likeCount}</div>
+                    {liked ? <i class='bx bxs-like'></i> : <i className="bx bx-like"></i>}
+                </li>
+            </ul>
+            { getRetweetArea() }
         </div>
     )
 };

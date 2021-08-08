@@ -1,0 +1,12 @@
+.main-view {
+    padding-left: 245px;
+    padding-right: 5px;
+    background-color: var(--color-5);
+}
+
+@media only screen and (max-width: 650px) {
+    .main-view {
+        padding-left: 55px;
+        padding-right: 5px;
+    }
+}

@@ -1,15 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Tweet from '../components/Tweet';    
+import TweetContainer from './TweetContainer';
 
 const Home = ({ tweets }) => {
     return (
-        <div style={{marginTop:70}}>
-            {tweets.results.map((tweet) => (
-                <Tweet id={`tweet_id_${tweet.id}`} tweet={tweet} owner_username={tweet.owner_username} owner_id={tweet.owner_id}/>
-            ))}
-        </div>
+        <TweetContainer tweets={tweets} />
     )
 };
 
