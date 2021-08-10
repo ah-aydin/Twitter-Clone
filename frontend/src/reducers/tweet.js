@@ -1,6 +1,8 @@
 import {
     TWEET_GET_FOLLOWING_SUCCESS,
     TWEET_GET_FOLLOWING_FAIL,
+    LOAD_MORE_FOLLOWING_SUCCESS,
+    LOAD_MORE_FOLLOWING_FAIL,
     LOAD_USER_TWEET_SUCCESS,
     LOAD_USER_TWEET_FAIL,
     TWEET_CLEAR,
@@ -56,6 +58,20 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 following_tweets: payload
+            }
+        case LOAD_MORE_FOLLOWING_SUCCESS:
+            return {
+                ...state,
+                following_tweets: {
+                    ...state.following_tweets,
+                    results: [...state.following_tweets.results, ...payload.results],
+                    next: payload.next,
+                    previous: payload.previous
+                }
+            }
+        case LOAD_MORE_FOLLOWING_FAIL:
+            return {
+                ...state
             }
         case TWEET_CLEAR:
         case TWEET_GET_FOLLOWING_FAIL:

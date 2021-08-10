@@ -98,3 +98,19 @@ class UserHadLikedTweet(generics.GenericAPIView):
             return Response(True)
         except Exception:
             return Response(False)
+
+class RetweetList(generics.GenericAPIView):
+    serializer_class = TweetSerializer
+
+    def get_queryset(self):
+        tweet = get_tweet(self.kwargs['pk'])
+        return tweet.reply_tweet.all()
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            # Get the reply tweets
+            queryset = self.get_queryset()
+            serializer = self.serializer_class(queryset, many=True, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)

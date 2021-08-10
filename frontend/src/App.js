@@ -9,6 +9,7 @@ import ResetPassword from './containers/ResetPassword';
 import ResetPasswordConfirm from './containers/ResetPasswordConfirm';
 import Account from './containers/Account';
 import CreateTweet from './containers/CreateTweet';
+import MyTweets from './containers/MyTweets';
 
 import Layout from './hocs/Layout';
 
@@ -35,9 +36,11 @@ function App() {
             <Route exact path="/account/:id" component={Account} />
             <Route exact path="/create_tweet" component={CreateTweet} />
 
-            <Route exact path="/my_tweets"/>
+            <Route exact path="/my_tweets" component={MyTweets}/>
             <Route exact path="/hastags" />
             <Route exact path="/preferences" />
+
+            <Route exact path="/tweet/:id" />
           </Switch>
         </Layout>
       </Router>

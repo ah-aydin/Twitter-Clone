@@ -13,4 +13,7 @@ urlpatterns = [
 
     # Likes
     path('likes/<int:tweet_id>/', views.UserHadLikedTweet.as_view(), name='user-has-liked-tweet'),
+
+    # Get retweets
+    path('retweet/<int:pk>/', views.RetweetList.as_view(), name='retweet-list')
 ]

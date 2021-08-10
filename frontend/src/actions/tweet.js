@@ -2,6 +2,8 @@ import axios from 'axios'
 import {
     TWEET_GET_FOLLOWING_SUCCESS,
     TWEET_GET_FOLLOWING_FAIL,
+    LOAD_MORE_FOLLOWING_SUCCESS,
+    LOAD_MORE_FOLLOWING_FAIL,
     LOAD_USER_TWEET_SUCCESS,
     LOAD_USER_TWEET_FAIL,
     LOAD_USER_MORE_TWEET_SUCCESS,
@@ -26,6 +28,28 @@ export const getFollowingTweets = () => async dispatch => {
             type: TWEET_GET_FOLLOWING_FAIL
         });
     }
+}
+
+export const loadMoreFollowingTweets = (next) => async dispatch => {
+    const config = {
+        headers: {
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+        }
+    }
+
+    axios.get(next, config)
+    .then(response => {
+        const data = response.data;
+        dispatch({
+            type:LOAD_MORE_FOLLOWING_SUCCESS,
+            payload: data
+        });
+    })
+    .catch(err => {
+        dispatch({
+            type: LOAD_MORE_FOLLOWING_FAIL
+        });
+    })
 }
 
 export const like_tweet = (tweet_id)  => {

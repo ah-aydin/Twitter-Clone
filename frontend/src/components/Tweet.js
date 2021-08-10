@@ -24,6 +24,8 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
 
     const likeTweet = (e) => {
         e.preventDefault();
+        if (!isAuthenticated) return;
+
         setLiked(!liked);
         if (liked) {
             setLikeCount(likeCount - 1);
@@ -34,6 +36,7 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
     };
 
     const userLikedTweet = () => {
+        if (!isAuthenticated) return;
         const config = {
             headers: {
                 "Authorization": `JWT ${localStorage.getItem("access")}`
@@ -54,6 +57,7 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
     }
 
     const onRetweetClick = () => {
+        if (!isAuthenticated) return;
         setRetweeting(!retweeting)
     }
 
@@ -109,8 +113,11 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
             </div>
             <hr style={{marginBottom: 3}} />
             <ul className="actions">
-                <li className="button">
-                    <i className='bx bx-reply' onClick={onRetweetClick}></i>
+                <Link className="button" to={`/tweet/${tweet.id}`}>
+                    Replies
+                </Link>
+                <li className="button" onClick={onRetweetClick}>
+                    <i className='bx bx-reply'></i>
                 </li>
                 <li className="button" onClick={likeTweet}>
                     <div className="value">{likeCount}</div>
