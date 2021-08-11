@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Link } from'react-router-dom';
 import styles from 'styled-components';
 
@@ -26,6 +26,10 @@ const Navbar = ({ isAuthenticated, logout }) => {
     const guestLinks = () => {
         return (
             <Fragment>
+                <Link className="nav_list_item" to="/explore" onClick={(e) => onNavItemClick(e)}>
+                    <i class='bx bx-compass'></i>
+                    <span className="links_name">Explore</span>
+                </Link>
                 <Link className="nav_list_item" to="/users" onClick={(e) => onNavItemClick(e)}>
                     <i className="bx bx-user"></i>
                     <span className="links_name">Users</span>
@@ -57,6 +61,10 @@ const Navbar = ({ isAuthenticated, logout }) => {
                     <i className="bx bx-archive"></i>
                     <span className="links_name">You're tweets</span>
                 </Link>
+                <Link className="nav_list_item" to="/explore" onClick={(e) => onNavItemClick(e)}>
+                    <i class='bx bx-compass'></i>
+                    <span className="links_name">Explore</span>
+                </Link>
                 <Link className="nav_list_item" to="/users" onClick={(e) => onNavItemClick(e)}>
                     <i className="bx bx-user"></i>
                     <span className="links_name">Users</span>
@@ -77,6 +85,15 @@ const Navbar = ({ isAuthenticated, logout }) => {
         )
     };
     
+    useEffect(() => {
+        const nav_items = document.querySelectorAll(".sidebar .nav_list_item");
+        for (let i = 1; i < nav_items.length; ++i) {
+            nav_items[i].classList.remove("active");
+        }
+        lastActiveElement = nav_items[0];
+        lastActiveElement.classList.add("active");
+    }, [isAuthenticated])
+
     return (
         <div className="sidebar">
             <div className="logo_content">

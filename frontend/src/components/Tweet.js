@@ -12,7 +12,7 @@ const Tweet = ({ tweet, owner_id, owner_username, id, isAuthenticated }) => {
     const [retweeting, setRetweeting] = useState(false);
     const [likeCount, setLikeCount] = useState(tweet.like_count);
     const [retweetContent, setRetweetContent] = useState("");
-
+    
     const onChange = (e) => setRetweetContent(e.target.value);
     const onSubmit = (e) => {
         e.preventDefault();

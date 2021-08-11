@@ -21,5 +21,5 @@ urlpatterns = [
     path('following/list/<int:pk>/', views.FollowingList.as_view(), name='account-follow-list'),
 
     # Account follower
-    path('follower/<int:pk>/', views.FollowerList.as_view(), name='account-followers-list')
+    path('follower/<int:pk>/', views.FollowerList.as_view(), name='account-followers-list'),
 ]

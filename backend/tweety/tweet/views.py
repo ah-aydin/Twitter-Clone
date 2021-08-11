@@ -52,6 +52,28 @@ class TweetContent(generics.GenericAPIView):
         # TODO return a more fance response
         return Response(tweet.content)
 
+class RetweetList(generics.GenericAPIView):
+    serializer_class = TweetSerializer
+
+    def get_queryset(self):
+        tweet = get_tweet(self.kwargs['pk'])
+        return tweet.reply_tweet.order_by('-date_created')
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            # Get the reply tweets
+            queryset = self.get_queryset()
+            serializer = self.serializer_class(queryset, many=True, context={'request': request})
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception:
+            return Response({}, status=status.HTTP_400_BAD_REQUEST)
+
+class Explore(generics.ListAPIView):
+    serializer_class = TweetSerializer
+
+    def get_queryset(self):
+        return Tweet.objects.order_by('-like_count')
+
 # Like
 class LikeList(generics.ListAPIView):
     serializer_class = LikeSerializer
@@ -89,7 +111,7 @@ class LikeAddRemove(generics.GenericAPIView):
             like = Like.objects.create(owner=request.user, tweet=tweet)
             return Response("Liked", status=status.HTTP_200_OK)
 
-class UserHadLikedTweet(generics.GenericAPIView):
+class UserHasLikedTweet(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, tweet_id, *args, **kwargs):
@@ -98,19 +120,3 @@ class UserHadLikedTweet(generics.GenericAPIView):
             return Response(True)
         except Exception:
             return Response(False)
-
-class RetweetList(generics.GenericAPIView):
-    serializer_class = TweetSerializer
-
-    def get_queryset(self):
-        tweet = get_tweet(self.kwargs['pk'])
-        return tweet.reply_tweet.all()
-
-    def get(self, request, pk, *args, **kwargs):
-        try:
-            # Get the reply tweets
-            queryset = self.get_queryset()
-            serializer = self.serializer_class(queryset, many=True, context={'request': request})
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception:
-            return Response({}, status=status.HTTP_400_BAD_REQUEST)

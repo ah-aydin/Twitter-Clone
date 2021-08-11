@@ -5,7 +5,7 @@ import { loadUserTweets, loadMoreUserTweets } from '../actions/tweet';
 
 import Tweet from "../components/Tweet";
 
-const MyTweets = ({ loadUserTweets, loadMoreUserTweets, user, tweets }) => {
+const MyTweets = ({ loadUserTweets, loadMoreUserTweets, user, tweets, isAuthenticated }) => {
     useEffect(() => {
         if (user) {
             loadUserTweets(user.id);
@@ -31,7 +31,8 @@ const MyTweets = ({ loadUserTweets, loadMoreUserTweets, user, tweets }) => {
 
 const mapStateToProps = (state) => ({
     tweets: state.tweet.tweets,
-    user: state.auth.user
+    user: state.auth.user,
+    isAuthenticated: state.auth.isAuthenticated
 });
 
 export default connect(mapStateToProps, { loadUserTweets, loadMoreUserTweets })(MyTweets);

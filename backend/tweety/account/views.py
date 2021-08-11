@@ -22,14 +22,14 @@ class AccountLikeList(generics.ListAPIView):
 
     def get_queryset(self):
         account = Account.objects.get(pk=self.kwargs['pk'])
-        return account.likes.order_by('date_created')
+        return account.likes.order_by('-date_created')
 
 class AccountTweetList(generics.ListAPIView):
     serializer_class = TweetSerializer
     
     def get_queryset(self):
         account = Account.objects.get(pk=self.kwargs['pk'])
-        return account.tweets.order_by('date_created')
+        return account.tweets.order_by('-date_created')
 
 # Follow
 

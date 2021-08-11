@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import ScrollToTop from './ScrollToTop';
+
 import Activate from './containers/Activate';
 import Home from './containers/Home';
 import Login from './containers/Login';
@@ -10,6 +12,7 @@ import ResetPasswordConfirm from './containers/ResetPasswordConfirm';
 import Account from './containers/Account';
 import CreateTweet from './containers/CreateTweet';
 import MyTweets from './containers/MyTweets';
+import Explore from './containers/Explore';
 
 import Layout from './hocs/Layout';
 
@@ -25,6 +28,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <Layout>
+          <ScrollToTop />
           <Switch>
             <Route exact path="/" component={Home}/>
             <Route exact path="/login" component={Login}/>
@@ -36,6 +40,7 @@ function App() {
             <Route exact path="/account/:id" component={Account} />
             <Route exact path="/create_tweet" component={CreateTweet} />
 
+            <Route exact path="/explore" component={Explore} />
             <Route exact path="/my_tweets" component={MyTweets}/>
             <Route exact path="/hastags" />
             <Route exact path="/preferences" />

@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import Tweet from '../components/Tweet';
 
-import { loadMoreFollowingTweets } from '../actions/tweet';
+import { loadExploreTweets, loadMoreExploreTweets } from '../actions/tweet';
 
 import './style/tweet_container.css';
-import { Redirect } from 'react-router-dom';
 
-const Home = ({ tweets, loadMoreFollowingTweets, isAuthenticated }) => {
-    if (!isAuthenticated) {
-        return <Redirect to="/explore" />
-    }
+const Explore = ({ tweets, loadExploreTweets, loadMoreExploreTweets }) => {
+
+    useEffect(() => {
+        loadExploreTweets();
+    }, []);
 
     return (
         <div className="tweet-container">
@@ -20,7 +20,7 @@ const Home = ({ tweets, loadMoreFollowingTweets, isAuthenticated }) => {
                 ))}
                 {tweets.next ? 
                     <div className="form-group row justify-content-md-center mt-3 mb-1 px-1">
-                    <button onClick={(e) => loadMoreFollowingTweets(tweets.next)} className="btn btn-primary col-sm-10">
+                    <button onClick={(e) => loadMoreExploreTweets(tweets.next)} className="btn btn-primary col-sm-10">
                         Load More
                     </button>
                 </div>
@@ -31,8 +31,7 @@ const Home = ({ tweets, loadMoreFollowingTweets, isAuthenticated }) => {
 };
 
 const mapStateToProps = (state) => ({
-    tweets: state.tweet.following_tweets,
-    isAuthenticated: state.auth.isAuthenticated
+    tweets: state.tweet.explore_tweets
 });
 
-export default connect(mapStateToProps, { loadMoreFollowingTweets })(Home);
+export default connect(mapStateToProps, { loadExploreTweets, loadMoreExploreTweets })(Explore);
